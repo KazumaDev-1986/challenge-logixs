@@ -5,31 +5,48 @@ services:
     image: postgres:15-alpine
     container_name: postgres_db
     environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: challenge_logixs
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
     ports:
       - '5432:5432'
     volumes:
       - postgres_data:/var/lib/postgresql/data
     networks:
       - app-network
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U ${POSTGRES_USER}']
+      interval: 5s
+      timeout: 5s
+      retries: 5
 
-  auth-service:
+  api:
     build:
       context: .
-      dockerfile: Dockerfile
-    container_name: auth_service
+      dockerfile: apps/api/Dockerfile
+    container_name: api_service
     environment:
-      DATABASE_URL: postgresql://postgres:postgres@postgres:5432/auth_db
-      JWT_SECRET: your_jwt_secret_key_here
-      JWT_EXPIRES_IN: 24h
+      NODE_ENV: ${NODE_ENV}
+      HOST: ${HOST}
+      PORT: ${PORT}
+      DB_HOST: ${DB_HOST}
+      DB_PORT: ${DB_PORT}
+      DB_USERNAME: ${DB_USERNAME}
+      DB_PASSWORD: ${DB_PASSWORD}
+      DB_NAME: ${DB_NAME}
+      JWT_SECRET: ${JWT_SECRET}
+      JWT_EXPIRES_IN: ${JWT_EXPIRES_IN}
     ports:
-      - '3000:3000'
+      - '${PORT}:${PORT}'
     depends_on:
-      - postgres
+      postgres:
+        condition: service_healthy
     networks:
       - app-network
+    restart: unless-stopped
+    volumes:
+      - ./apps/api:/app/api
+      - /app/api/node_modules
 
 volumes:
   postgres_data:

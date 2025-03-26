@@ -4,21 +4,58 @@
 # Tip: Modify "docker-build" options in project.json to change docker build args.
 #
 # Run the container with `docker run -p 4242:4242 -t api`.
-FROM docker.io/node:lts-alpine
 
-ENV HOST=0.0.0.0
-ENV PORT=4242
+# Build stage
+FROM node:lts-alpine AS builder
 
 WORKDIR /app
 
+# Copy package files
+COPY package*.json ./
+COPY apps/api/package*.json ./apps/api/
+
+# Install dependencies
+RUN npm ci
+
+# Copy source code
+COPY . .
+
+# Build the application using Nx
+RUN npx nx build api
+
+# Production stage
+FROM node:lts-alpine AS production
+
+# Create non-root user
 RUN addgroup --system api && \
-          adduser --system -G api api
+    adduser --system -G api api
 
-COPY apps/api/dist api/
-RUN chown -R api:api .
+# Set environment variables
+ENV NODE_ENV=production \
+    HOST=0.0.0.0 \
+    PORT=4242
 
-# You can remove this install step if you build with `--bundle` option.
-# The bundled output will include external dependencies.
-RUN npm --prefix api --omit=dev -f install
+# Create app directory
+WORKDIR /app
 
-CMD [ "node", "api" ]
+# Copy built assets and package files from builder
+COPY --from=builder /app/apps/api/dist ./api
+COPY --from=builder /app/apps/api/package*.json ./
+COPY --from=builder /app/package-lock.json ./
+
+# Install production dependencies only
+RUN npm ci --omit=dev && \
+    chown -R api:api .
+
+# Switch to non-root user
+USER api
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=3s --start-period=30s --retries=3 \
+    CMD wget --no-verbose --tries=1 --spider http://localhost:${PORT}/health || exit 1
+
+# Expose port
+EXPOSE ${PORT}
+
+# Start the application
+CMD ["node", "api"]
