@@ -39,7 +39,7 @@ ENV NODE_ENV=production \
 WORKDIR /app
 
 # Copy built assets and package files from builder
-COPY --from=builder /app/apps/api/dist ./api
+COPY --from=builder /app/apps/api/dist/apps/api/src ./src
 COPY --from=builder /app/apps/api/package*.json ./
 COPY --from=builder /app/package-lock.json ./
 
@@ -58,4 +58,4 @@ HEALTHCHECK --interval=30s --timeout=3s --start-period=30s --retries=3 \
 EXPOSE ${PORT}
 
 # Start the application
-CMD ["node", "api"]
+CMD ["node", "src/main.js"]

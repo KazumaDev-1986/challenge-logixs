@@ -2,6 +2,19 @@
   "name": "@challenge-logixs/api",
   "version": "0.0.1",
   "private": true,
+  "dependencies": {
+    "express": "^4.21.2",
+    "reflect-metadata": "^0.2.2",
+    "typeorm": "^0.3.21",
+    "pg": "^8.14.1",
+    "cors": "^2.8.5",
+    "helmet": "^8.1.0",
+    "dotenv": "^16.4.7",
+    "bcryptjs": "^3.0.2",
+    "jsonwebtoken": "^9.0.2",
+    "class-validator": "^0.14.1",
+    "class-transformer": "^0.5.1"
+  },
   "nx": {
     "name": "api",
     "targets": {
