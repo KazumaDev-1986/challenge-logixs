@@ -23,6 +23,9 @@ export class Task {
   @Column({ type: 'boolean', default: false })
   completed!: boolean;
 
+  @Column({ type: 'timestamp', nullable: true })
+  completedAt?: Date;
+
   @Column({ type: 'integer' })
   userId!: number;
 

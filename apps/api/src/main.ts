@@ -6,6 +6,7 @@ import { json } from 'body-parser';
 import dotenv from 'dotenv';
 import { authRouter } from './infrastructure/controllers/auth.controller';
 import { taskRouter } from './infrastructure/controllers/task.controller';
+import { statsRouter } from './infrastructure/controllers/stats.controller';
 import { PostgresDataSource } from './infrastructure/database/postgres';
 
 // Load environment variables first
@@ -49,6 +50,7 @@ const configureRoutes = (app: Express): void => {
 
   app.use('/auth', authRouter);
   app.use('/tasks', taskRouter);
+  app.use('/stats', statsRouter);
 };
 
 // Error handling middleware
