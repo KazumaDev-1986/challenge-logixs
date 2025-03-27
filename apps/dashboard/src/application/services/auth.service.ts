@@ -1,49 +1,22 @@
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4242';
+import {
+  SignUpData,
+  SignInData,
+  User,
+  AuthResponse,
+  ErrorResponse,
+} from '../../types/auth';
 
-interface SignUpData {
-  name: string;
-  email: string;
-  password: string;
-}
-
-interface SignInData {
-  email: string;
-  password: string;
-}
-
-interface User {
-  name: string;
-  email: string;
-}
-
-interface AuthResponse {
-  token: string;
-  user: User;
-}
-
-interface ValidationError {
-  target: Record<string, any>;
-  value: string;
-  property: string;
-  children: any[];
-  constraints: Record<string, string>;
-}
-
-interface ErrorResponse {
-  error: string;
-  details?: ValidationError[];
-}
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://0.0.0.0:4242';
 
 class AuthService {
+  private static readonly USER_KEY = 'user';
   private static instance: AuthService;
-  private token: string | null = null;
   private user: User | null = null;
 
   private constructor() {
-    // Inicializar el token y datos del usuario desde localStorage si existen
+    // Inicializar datos del usuario desde localStorage si existen
     if (typeof window !== 'undefined') {
-      this.token = localStorage.getItem('token');
-      const userStr = localStorage.getItem('user');
+      const userStr = localStorage.getItem(AuthService.USER_KEY);
       if (userStr) {
         this.user = JSON.parse(userStr);
       }
@@ -57,29 +30,18 @@ class AuthService {
     return AuthService.instance;
   }
 
-  private setToken(token: string): void {
-    this.token = token;
-    localStorage.setItem('token', token);
-  }
-
   private setUser(user: User): void {
     this.user = user;
-    localStorage.setItem('user', JSON.stringify(user));
-  }
-
-  public getToken(): string | null {
-    return this.token;
+    localStorage.setItem(AuthService.USER_KEY, JSON.stringify(user));
   }
 
   public getUser(): User | null {
     return this.user;
   }
 
-  public removeToken(): void {
-    this.token = null;
+  public removeUser(): void {
     this.user = null;
-    localStorage.removeItem('token');
-    localStorage.removeItem('user');
+    localStorage.removeItem(AuthService.USER_KEY);
   }
 
   private async handleResponse<T>(response: Response): Promise<T> {
@@ -120,8 +82,7 @@ class AuthService {
       });
 
       const result = await this.handleResponse<AuthResponse>(response);
-      this.setToken(result.token);
-      this.setUser(result.user);
+      this.setUser({ ...result.user, token: result.token });
       return result;
     } catch (error) {
       if (error instanceof Error) {
@@ -142,8 +103,7 @@ class AuthService {
       });
 
       const result = await this.handleResponse<AuthResponse>(response);
-      this.setToken(result.token);
-      this.setUser(result.user);
+      this.setUser({ ...result.user, token: result.token });
       return result;
     } catch (error) {
       if (error instanceof Error) {
@@ -154,7 +114,7 @@ class AuthService {
   }
 
   public async signOut(): Promise<void> {
-    this.removeToken();
+    this.removeUser();
   }
 }
 

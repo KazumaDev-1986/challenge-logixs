@@ -3,15 +3,36 @@
 import { FC } from 'react';
 import { useRouter } from 'next/navigation';
 import { TaskForm } from '@/components/tasks/TaskForm';
+import { TaskService } from '@/application/services/task.service';
+import { useAuth } from '@/hooks/useAuth';
 import styles from './page.module.scss';
 
 const NewTaskPage: FC = () => {
   const router = useRouter();
+  const { user } = useAuth();
 
-  const handleSubmit = (data: any) => {
-    // TODO: Implement API call to create task
-    console.log('Creating task:', data);
-    router.push('/tasks');
+  const handleSubmit = async (data: any) => {
+    try {
+      if (!user?.token) return;
+
+      await TaskService.create(
+        {
+          title: data.title,
+          description: data.description,
+          dueDate: data.dueDate,
+          completed: false,
+        },
+        user.token
+      );
+
+      router.push('/tasks');
+    } catch (error) {
+      if (error instanceof Error && error.message.includes('401')) {
+        localStorage.removeItem('user');
+        router.push('/sign-in');
+      }
+      console.error('Error creating task:', error);
+    }
   };
 
   return (

@@ -3,23 +3,22 @@
 import { FC, ReactNode } from 'react';
 import { Sidebar } from '@/components/layout/Sidebar';
 import styles from './layout.module.scss';
+import { useAuth } from '@/hooks/useAuth';
 
 interface TasksLayoutProps {
   children: ReactNode;
 }
 
 const TasksLayout: FC<TasksLayoutProps> = ({ children }) => {
-  // TODO: Get user data from auth context
-  const userName = 'John Doe';
+  const { loading } = useAuth();
 
-  const handleLogout = () => {
-    // TODO: Implement logout logic
-    console.log('Logout clicked');
-  };
+  if (loading) {
+    return null;
+  }
 
   return (
     <div className={styles.container}>
-      <Sidebar userName={userName} onLogout={handleLogout} />
+      <Sidebar />
       <main className={styles.main}>{children}</main>
     </div>
   );

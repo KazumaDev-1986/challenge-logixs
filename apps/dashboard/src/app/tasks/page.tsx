@@ -1,116 +1,105 @@
 'use client';
 
-import { FC, useState } from 'react';
+import { FC, useState, useEffect } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import styles from './page.module.scss';
-
-interface Task {
-  id: number;
-  title: string;
-  description: string;
-  dueDate: string;
-  completed: boolean;
-}
-
-const mockTasks: Task[] = [
-  {
-    id: 1,
-    title: 'Complete project documentation',
-    description:
-      'Write comprehensive documentation for the project including setup instructions and API endpoints.',
-    dueDate: '2024-03-30T10:00:00',
-    completed: false,
-  },
-  {
-    id: 2,
-    title: 'Review pull requests',
-    description: 'Review and merge pending pull requests for the main branch.',
-    dueDate: '2024-03-28T15:00:00',
-    completed: true,
-  },
-  {
-    id: 3,
-    title: 'Team meeting',
-    description: 'Weekly sync meeting with the development team.',
-    dueDate: '2024-03-29T09:00:00',
-    completed: false,
-  },
-];
-
-const formatDate = (dateString: string) => {
-  const date = new Date(dateString);
-  return (
-    date.toISOString().split('T')[0] + ' ' + date.toTimeString().split(' ')[0]
-  );
-};
+import { useAuth } from '@/hooks/useAuth';
+import { TaskService } from '@/application/services/task.service';
+import { Task } from '@/types/task';
+import { TaskCard } from '@/components/tasks/TaskCard';
 
 const TasksPage: FC = () => {
-  const [tasks, setTasks] = useState<Task[]>(mockTasks);
+  const [tasks, setTasks] = useState<Task[]>([]);
+  const [loading, setLoading] = useState(true);
+  const router = useRouter();
+  const { user } = useAuth();
 
-  const handleDelete = (id: number) => {
+  useEffect(() => {
+    const fetchTasks = async () => {
+      try {
+        if (!user?.token) return;
+
+        const data = await TaskService.getAll(user.token);
+        setTasks(data);
+      } catch (error) {
+        if (error instanceof Error && error.message.includes('401')) {
+          localStorage.removeItem('user');
+          router.push('/sign-in');
+        }
+        console.error('Error fetching tasks:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchTasks();
+  }, [user, router]);
+
+  const handleDelete = async (id: number) => {
     if (window.confirm('Are you sure you want to delete this task?')) {
-      setTasks(tasks.filter((task) => task.id !== id));
+      try {
+        if (!user?.token) return;
+
+        await TaskService.delete(id, user.token);
+        setTasks(tasks.filter((task) => task.id !== id));
+      } catch (error) {
+        if (error instanceof Error && error.message.includes('401')) {
+          localStorage.removeItem('user');
+          router.push('/sign-in');
+        }
+        console.error('Error deleting task:', error);
+      }
     }
   };
 
-  const handleToggleComplete = (id: number) => {
-    setTasks(
-      tasks.map((task) =>
-        task.id === id ? { ...task, completed: !task.completed } : task
-      )
-    );
+  const handleToggleComplete = async (id: number) => {
+    try {
+      if (!user?.token) return;
+
+      const task = tasks.find((t) => t.id === id);
+      if (!task) return;
+
+      const updatedTask = await TaskService.update(
+        id,
+        { completed: !task.completed },
+        user.token
+      );
+
+      setTasks(
+        tasks.map((task) =>
+          task.id === id ? { ...task, completed: updatedTask.completed } : task
+        )
+      );
+    } catch (error) {
+      if (error instanceof Error && error.message.includes('401')) {
+        localStorage.removeItem('user');
+        router.push('/sign-in');
+      }
+      console.error('Error updating task:', error);
+    }
   };
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <div className={styles.container}>
       <div className={styles.header}>
         <h1>Tasks</h1>
-        <Link href="/tasks/new" className={styles.newButton}>
+        <Link href="/tasks/new" className={styles.newTaskButton}>
           New Task
         </Link>
       </div>
-
-      <div className={styles.tasksList}>
+      <div className={styles.taskList}>
         {tasks.map((task) => (
-          <div key={task.id} className={styles.taskCard}>
-            <div className={styles.taskHeader}>
-              <div className={styles.taskTitle}>
-                <input
-                  type="checkbox"
-                  checked={task.completed}
-                  onChange={() => handleToggleComplete(task.id)}
-                  className={styles.checkbox}
-                />
-                <h3 className={task.completed ? styles.completed : ''}>
-                  {task.title}
-                </h3>
-              </div>
-              <div className={styles.taskActions}>
-                <Link href={`/tasks/${task.id}`} className={styles.editButton}>
-                  Edit
-                </Link>
-                <button
-                  onClick={() => handleDelete(task.id)}
-                  className={styles.deleteButton}
-                >
-                  Delete
-                </button>
-              </div>
-            </div>
-            <p className={styles.description}>{task.description}</p>
-            <div className={styles.taskFooter}>
-              <span className={styles.dueDate}>
-                Due: {formatDate(task.dueDate)}
-              </span>
-              <span
-                className={`${styles.status} ${
-                  task.completed ? styles.completed : styles.pending
-                }`}
-              >
-                {task.completed ? 'Completed' : 'Pending'}
-              </span>
-            </div>
-          </div>
+          <TaskCard
+            key={task.id}
+            task={task}
+            onToggleComplete={handleToggleComplete}
+            onDelete={handleDelete}
+          />
         ))}
       </div>
     </div>

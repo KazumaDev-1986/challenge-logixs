@@ -21,7 +21,6 @@ export const useAuth = () => {
       } catch (error) {
         console.error('Error parsing user data:', error);
         localStorage.removeItem('user');
-        localStorage.removeItem('token');
         router.push('/auth/sign-in');
       }
     } else {
@@ -32,7 +31,6 @@ export const useAuth = () => {
 
   const logout = () => {
     localStorage.removeItem('user');
-    localStorage.removeItem('token');
     router.push('/auth/sign-in');
   };
 

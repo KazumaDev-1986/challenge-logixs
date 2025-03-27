@@ -3,9 +3,9 @@ import { useRouter } from 'next/navigation';
 import { authService } from '../services/auth.service';
 
 interface User {
-  id: string;
   name: string;
   email: string;
+  token: string;
 }
 
 interface AuthState {
@@ -23,13 +23,11 @@ export const useAuth = () => {
   });
 
   useEffect(() => {
-    const token = authService.getToken();
-    if (token) {
-      // Aquí podrías hacer una llamada a la API para obtener los datos del usuario
-      // Por ahora, solo actualizamos el estado de autenticación
+    const user = authService.getUser();
+    if (user) {
       setAuthState({
         isAuthenticated: true,
-        user: null, // Se actualizará cuando implementemos la obtención de datos del usuario
+        user,
         isLoading: false,
       });
     } else {
