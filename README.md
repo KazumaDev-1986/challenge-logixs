@@ -1,6 +1,10 @@
 # Challenge Logixs
 
-## Screenshot de la App.
+## Descripción
+
+Este proyecto es una aplicación de gestión de tareas desarrollada como un monorepo utilizando Nx. El sistema está compuesto por una API backend y un dashboard frontend.
+
+## Screenshots de la App.
 
 - Dashboard sin tareas:
 
@@ -14,9 +18,9 @@
 
 ![alt text](img/img1.png)
 
-## Descripción
+- Formulario:
 
-Este proyecto es una aplicación de gestión de tareas desarrollada como un monorepo utilizando Nx. El sistema está compuesto por una API backend y un dashboard frontend.
+![alt text](img/img3.png)
 
 ## Tecnologías Principales
 
