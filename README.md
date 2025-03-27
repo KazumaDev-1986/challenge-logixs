@@ -1,30 +1,42 @@
 # Challenge Logixs
 
-## Tecnologías y Herramientas Utilizadas
+## Descripción
 
-El proyecto utiliza **Nx** para la gestión de un monorepo, lo que permite organizar de manera eficiente las aplicaciones del backend y frontend. Se han desarrollado dos aplicaciones principales:
+Este proyecto es una aplicación de gestión de tareas desarrollada como un monorepo utilizando Nx. El sistema está compuesto por una API backend y un dashboard frontend.
 
-- **API (Backend):** Implementada con Node.js y AWS Serverless Framework.
-- **Dashboard (Frontend):** Desarrollado con Next.js para la gestión de la interfaz de usuario.
+## Tecnologías Principales
 
-## A tener encuenta
+- **Nx**: Gestión del monorepo
+- **Backend**: Node.js con AWS Serverless Framework
+- **Frontend**: Next.js
+- **Base de datos**: PostgreSQL
+- **Docker**: Containerización y despliegue
 
-Estoy subiendo los fichero `.env` para que no tengais que crearlos ustedes en los siguientes lugares:
+## Requisitos Previos
 
-1. **api:** `/apps/api/.env`
-2. **:** `/apps/dashboard/.env`
-3. **root:** `/.env`
+- Node.js
+- Docker y Docker Compose
+- Nx CLI (`npm i -g nx`)
 
-## Preparar el entorno
+## Configuración del Entorno
 
-Para ejecutar el proyecto, sigue estos pasos:
+### 1. Instalación de Dependencias
 
-1. **Instalar Nx:** `npm i -g nx`
-2. **Instalar dependencias:** `npm i`
+```bash
+npm install
+```
 
-## Docker Compose
+### 2. Variables de Entorno
 
-El proyecto incluye una configuración de Docker Compose que configura tanto el servicio API como la base de datos PostgreSQL. Para iniciar los servicios, ejecuta:
+El proyecto incluye archivos `.env` preconfigurados en las siguientes ubicaciones:
+
+- `/apps/api/.env` - Configuración del backend
+- `/apps/dashboard/.env` - Configuración del frontend
+- `/.env` - Configuración global
+
+## Iniciar el Proyecto
+
+### 1. Iniciar Servicios con Docker
 
 ```bash
 docker-compose up -d
@@ -32,41 +44,50 @@ docker-compose up -d
 
 Esto iniciará:
 
-- Servicio API en el puerto 4242
-- Base de datos PostgreSQL en el puerto 5432
+- API en `http://localhost:4242`
+- PostgreSQL en `localhost:5432`
 
-Asegúrate de tener Docker y Docker Compose instalados en tu sistema antes de ejecutar el comando.
+### 2. Iniciar el Dashboard
 
-## Ejecutar el dashboard
+```bash
+npx nx dev dashboard
+```
 
-Para ejecutar el frontend:
-
-1. **Script:** `npx nx dev dashboard`
-
-## Endpoints de la API
+## API Endpoints
 
 ### Autenticación
 
-- `POST /auth/signup` - Registrar un nuevo usuario
-- `POST /auth/signin` - Iniciar sesión y obtener token JWT
+| Método | Endpoint       | Descripción                    |
+| ------ | -------------- | ------------------------------ |
+| POST   | `/auth/signup` | Registro de nuevo usuario      |
+| POST   | `/auth/signin` | Inicio de sesión (retorna JWT) |
 
-### Tareas
+### Gestión de Tareas
 
-- `GET /tasks` - Obtener todas las tareas del usuario autenticado
-- `GET /tasks/:id` - Obtener una tarea específica por ID
-- `POST /tasks` - Crear una nueva tarea
-- `PUT /tasks/:id` - Actualizar una tarea
-- `DELETE /tasks/:id` - Eliminar una tarea
+| Método | Endpoint     | Descripción                         |
+| ------ | ------------ | ----------------------------------- |
+| GET    | `/tasks`     | Listar todas las tareas del usuario |
+| GET    | `/tasks/:id` | Obtener tarea específica            |
+| POST   | `/tasks`     | Crear nueva tarea                   |
+| PUT    | `/tasks/:id` | Actualizar tarea existente          |
+| DELETE | `/tasks/:id` | Eliminar tarea                      |
 
 ### Estadísticas
 
-- `GET /stats/overview` - Obtener estadísticas generales de tareas
-  - Total de tareas
-  - Tareas completadas
-  - Tareas pendientes
-  - Tareas vencidas
-  - Tareas próximas
-  - Tareas sin fecha de vencimiento
-- `GET /stats/completion-rate` - Obtener tasa de finalización de tareas por mes
-- `GET /stats/distribution` - Obtener distribución de tareas por estado y fecha de vencimiento
-- `GET /stats/productivity` - Obtener puntuación de productividad y métricas
+| Método | Endpoint                 | Descripción                      |
+| ------ | ------------------------ | -------------------------------- |
+| GET    | `/stats/overview`        | Estadísticas generales de tareas |
+| GET    | `/stats/completion-rate` | Tasa de finalización mensual     |
+| GET    | `/stats/distribution`    | Distribución por estado y fecha  |
+| GET    | `/stats/productivity`    | Métricas de productividad        |
+
+### Detalles de Estadísticas
+
+El endpoint `/stats/overview` proporciona:
+
+- Total de tareas
+- Tareas completadas
+- Tareas pendientes
+- Tareas vencidas
+- Tareas próximas
+- Tareas sin fecha de vencimiento
