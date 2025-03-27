@@ -12,6 +12,10 @@ const nextConfig = {
     // See: https://github.com/gregberge/svgr
     svgr: false,
   },
+  // Configuración del servidor
+  server: {
+    port: 8080,
+  },
 };
 
 const plugins = [
