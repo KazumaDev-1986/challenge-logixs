@@ -27,7 +27,7 @@ Se ha adoptado un enfoque basado en capas (Domain, Application, Infrastructure) 
 ## Tecnologías Principales
 
 - **Nx**: Gestión del monorepo
-- **Backend**: Node.js con AWS Serverless Framework
+- **Backend**: Node.js con Express
 - **Frontend**: Next.js
 - **Base de datos**: PostgreSQL
 - **Docker**: Containerización y despliegue
