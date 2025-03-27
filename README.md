@@ -91,3 +91,10 @@ El endpoint `/stats/overview` proporciona:
 - Tareas vencidas
 - Tareas próximas
 - Tareas sin fecha de vencimiento
+
+### Áreas de Mejora
+
+- Documentación de API más detallada
+- Tests unitarios
+- CI/CD pipeline
+- Monitoreo y logging
