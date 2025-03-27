@@ -7,6 +7,14 @@ El proyecto utiliza **Nx** para la gestión de un monorepo, lo que permite organ
 - **API (Backend):** Implementada con Node.js y AWS Serverless Framework.
 - **Dashboard (Frontend):** Desarrollado con Next.js para la gestión de la interfaz de usuario.
 
+## A tener encuenta
+
+Estoy subiendo los fichero `.env` para que no tengais que crearlos ustedes en los siguientes lugares:
+
+1. **api:** `/apps/api/.env`
+2. **:** `/apps/dashboard/.env`
+3. **root:** `/.env`
+
 ## Preparar el entorno
 
 Para ejecutar el proyecto, sigue estos pasos:
