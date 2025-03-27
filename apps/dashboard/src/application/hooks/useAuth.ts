@@ -8,45 +8,28 @@ interface User {
   token: string;
 }
 
-interface AuthState {
-  isAuthenticated: boolean;
-  user: User | null;
-  isLoading: boolean;
-}
-
 export const useAuth = () => {
+  const [user, setUser] = useState<User | null>(null);
+  const [loading, setLoading] = useState(true);
   const router = useRouter();
-  const [authState, setAuthState] = useState<AuthState>({
-    isAuthenticated: false,
-    user: null,
-    isLoading: true,
-  });
 
   useEffect(() => {
-    const user = authService.getUser();
-    if (user) {
-      setAuthState({
-        isAuthenticated: true,
-        user,
-        isLoading: false,
-      });
-    } else {
-      setAuthState({
-        isAuthenticated: false,
-        user: null,
-        isLoading: false,
-      });
+    const userData = localStorage.getItem('user');
+    if (userData) {
+      try {
+        const parsedUser = JSON.parse(userData);
+        setUser(parsedUser);
+      } catch (error) {
+        console.error('Error parsing user data:', error);
+        localStorage.removeItem('user');
+      }
     }
-  }, []);
+    setLoading(false);
+  }, [router]);
 
   const signIn = async (email: string, password: string) => {
     try {
-      const response = await authService.signIn({ email, password });
-      setAuthState({
-        isAuthenticated: true,
-        user: response.user,
-        isLoading: false,
-      });
+      await authService.signIn({ email, password });
       router.push('/home');
     } catch (error) {
       throw error;
@@ -63,20 +46,17 @@ export const useAuth = () => {
     }
   };
 
-  const signOut = async () => {
-    await authService.signOut();
-    setAuthState({
-      isAuthenticated: false,
-      user: null,
-      isLoading: false,
-    });
+  const logout = () => {
+    localStorage.removeItem('user');
+    setUser(null);
     router.push('/auth/sign-in');
   };
 
   return {
-    ...authState,
+    loading,
+    user,
     signIn,
     signUp,
-    signOut,
+    logout,
   };
 };

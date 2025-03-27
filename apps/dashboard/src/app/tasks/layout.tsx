@@ -3,7 +3,7 @@
 import { FC, ReactNode } from 'react';
 import { Sidebar } from '@/components/layout/Sidebar';
 import styles from './layout.module.scss';
-import { useAuth } from '@/hooks/useAuth';
+import { useAuth } from '@/application/hooks/useAuth';
 
 interface TasksLayoutProps {
   children: ReactNode;

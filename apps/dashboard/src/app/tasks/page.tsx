@@ -4,7 +4,7 @@ import { FC, useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import styles from './page.module.scss';
-import { useAuth } from '@/hooks/useAuth';
+import { useAuth } from '@/application/hooks/useAuth';
 import { TaskService } from '@/application/services/task.service';
 import { Task } from '@/types/task';
 import { TaskCard } from '@/components/tasks/TaskCard';

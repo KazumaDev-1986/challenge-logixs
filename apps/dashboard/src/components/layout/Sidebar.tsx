@@ -1,6 +1,6 @@
 import { FC } from 'react';
 import styles from './Sidebar.module.scss';
-import { useAuth } from '@/hooks/useAuth';
+import { useAuth } from '@/application/hooks/useAuth';
 
 export const Sidebar: FC = () => {
   const { user, loading, logout } = useAuth();

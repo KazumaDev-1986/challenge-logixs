@@ -3,7 +3,7 @@ import { StatService } from '../../application/services/stat.service';
 import { Loading } from '../atoms/Loading';
 import styles from './OverviewStat.module.scss';
 import { TaskOverview } from '../../types/stats';
-
+import { useAuth } from '@/application/hooks/useAuth';
 interface OverviewStatProps {
   token: string;
 }
@@ -12,6 +12,7 @@ export const OverviewStat: FC<OverviewStatProps> = ({ token }) => {
   const [stats, setStats] = useState<TaskOverview | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const { logout } = useAuth();
 
   useEffect(() => {
     const fetchStats = async () => {
@@ -21,6 +22,7 @@ export const OverviewStat: FC<OverviewStatProps> = ({ token }) => {
       } catch (err) {
         setError('Failed to load overview statistics');
         console.error('Error fetching overview stats:', err);
+        logout();
       } finally {
         setLoading(false);
       }

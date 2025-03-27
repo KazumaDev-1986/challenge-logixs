@@ -2,7 +2,7 @@
 
 import { FC } from 'react';
 import styles from './page.module.scss';
-import { useAuth } from '@/hooks/useAuth';
+import { useAuth } from '@/application/hooks/useAuth';
 import { Loading } from '@/components/atoms/Loading';
 import { OverviewStat } from '@/components/stats/OverviewStat';
 import { DistributionStat } from '@/components/stats/DistributionStat';

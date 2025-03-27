@@ -4,7 +4,7 @@ import { FC, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { TaskForm } from './TaskForm';
 import { TaskService } from '@/application/services/task.service';
-import { useAuth } from '@/hooks/useAuth';
+import { useAuth } from '@/application/hooks/useAuth';
 import styles from './TaskDetailClient.module.scss';
 import { Loading } from '@/components/atoms/Loading';
 

@@ -4,7 +4,7 @@ import { FC } from 'react';
 import { useRouter } from 'next/navigation';
 import { TaskForm } from '@/components/tasks/TaskForm';
 import { TaskService } from '@/application/services/task.service';
-import { useAuth } from '@/hooks/useAuth';
+import { useAuth } from '@/application/hooks/useAuth';
 import styles from './page.module.scss';
 
 const NewTaskPage: FC = () => {
