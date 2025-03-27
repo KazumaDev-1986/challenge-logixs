@@ -7,12 +7,19 @@ El proyecto utiliza **Nx** para la gestión de un monorepo, lo que permite organ
 - **API (Backend):** Implementada con Node.js y AWS Serverless Framework.
 - **Dashboard (Frontend):** Desarrollado con Next.js para la gestión de la interfaz de usuario.
 
+## Preparar el entorno
+
+Para ejecutar el proyecto, sigue estos pasos:
+
+1. **Instalar Nx:** `npm i -g nx`
+2. **Instalar dependencias:** `npm i`
+
 ## Docker Compose
 
 El proyecto incluye una configuración de Docker Compose que configura tanto el servicio API como la base de datos PostgreSQL. Para iniciar los servicios, ejecuta:
 
 ```bash
-docker-compose up
+docker-compose up -d
 ```
 
 Esto iniciará:
@@ -21,6 +28,12 @@ Esto iniciará:
 - Base de datos PostgreSQL en el puerto 5432
 
 Asegúrate de tener Docker y Docker Compose instalados en tu sistema antes de ejecutar el comando.
+
+## Ejecutar el dashboard
+
+Para ejecutar el frontend:
+
+1. **Script:** `npx nx dev dashboard`
 
 ## Endpoints de la API
 
