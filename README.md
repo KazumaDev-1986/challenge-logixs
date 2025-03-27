@@ -4,6 +4,8 @@
 
 Este proyecto es una aplicación de gestión de tareas desarrollada como un monorepo utilizando Nx. El sistema está compuesto por una API backend y un dashboard frontend.
 
+Se ha adoptado un enfoque basado en capas (Domain, Application, Infrastructure) para mejorar la separación de responsabilidades y facilitar la escalabilidad.
+
 ## Screenshots de la App.
 
 - Dashboard sin tareas:
