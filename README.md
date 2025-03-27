@@ -122,3 +122,4 @@ El endpoint `/stats/overview` proporciona:
 - Tests unitarios
 - CI/CD pipeline
 - Monitoreo y logging
+- No se utilizaron todos los endpoints de Stats
