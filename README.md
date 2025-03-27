@@ -1,101 +1,51 @@
-# ChallengeLogixs
+# Challenge Logixs
 
-<a alt="Nx logo" href="https://nx.dev" target="_blank" rel="noreferrer"><img src="https://raw.githubusercontent.com/nrwl/nx/master/images/nx-logo.png" width="45"></a>
+## Tecnologías y Herramientas Utilizadas
 
-✨ Your new, shiny [Nx workspace](https://nx.dev) is ready ✨.
+El proyecto utiliza **Nx** para la gestión de un monorepo, lo que permite organizar de manera eficiente las aplicaciones del backend y frontend. Se han desarrollado dos aplicaciones principales:
 
-[Learn more about this workspace setup and its capabilities](https://nx.dev/nx-api/node?utm_source=nx_project&amp;utm_medium=readme&amp;utm_campaign=nx_projects) or run `npx nx graph` to visually explore what was created. Now, let's get you up to speed!
+- **API (Backend):** Implementada con Node.js y AWS Serverless Framework.
+- **Dashboard (Frontend):** Desarrollado con Next.js para la gestión de la interfaz de usuario.
 
-## Run tasks
+## Docker Compose
 
-To run the dev server for your app, use:
+El proyecto incluye una configuración de Docker Compose que configura tanto el servicio API como la base de datos PostgreSQL. Para iniciar los servicios, ejecuta:
 
-```sh
-npx nx serve api
+```bash
+docker-compose up
 ```
 
-To create a production bundle:
+Esto iniciará:
 
-```sh
-npx nx build api
-```
+- Servicio API en el puerto 4242
+- Base de datos PostgreSQL en el puerto 5432
 
-To see all available targets to run for a project, run:
+Asegúrate de tener Docker y Docker Compose instalados en tu sistema antes de ejecutar el comando.
 
-```sh
-npx nx show project api
-```
+## Endpoints de la API
 
-These targets are either [inferred automatically](https://nx.dev/concepts/inferred-tasks?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) or defined in the `project.json` or `package.json` files.
+### Autenticación
 
-[More about running tasks in the docs &raquo;](https://nx.dev/features/run-tasks?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
+- `POST /auth/signup` - Registrar un nuevo usuario
+- `POST /auth/signin` - Iniciar sesión y obtener token JWT
 
-## Add new projects
+### Tareas
 
-While you could add new projects to your workspace manually, you might want to leverage [Nx plugins](https://nx.dev/concepts/nx-plugins?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) and their [code generation](https://nx.dev/features/generate-code?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) feature.
+- `GET /tasks` - Obtener todas las tareas del usuario autenticado
+- `GET /tasks/:id` - Obtener una tarea específica por ID
+- `POST /tasks` - Crear una nueva tarea
+- `PUT /tasks/:id` - Actualizar una tarea
+- `DELETE /tasks/:id` - Eliminar una tarea
 
-Use the plugin's generator to create new projects.
+### Estadísticas
 
-To generate a new application, use:
-
-```sh
-npx nx g @nx/node:app demo
-```
-
-To generate a new library, use:
-
-```sh
-npx nx g @nx/node:lib mylib
-```
-
-You can use `npx nx list` to get a list of installed plugins. Then, run `npx nx list <plugin-name>` to learn about more specific capabilities of a particular plugin. Alternatively, [install Nx Console](https://nx.dev/getting-started/editor-setup?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) to browse plugins and generators in your IDE.
-
-[Learn more about Nx plugins &raquo;](https://nx.dev/concepts/nx-plugins?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) | [Browse the plugin registry &raquo;](https://nx.dev/plugin-registry?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-
-## Set up CI!
-
-### Step 1
-
-To connect to Nx Cloud, run the following command:
-
-```sh
-npx nx connect
-```
-
-Connecting to Nx Cloud ensures a [fast and scalable CI](https://nx.dev/ci/intro/why-nx-cloud?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) pipeline. It includes features such as:
-
-- [Remote caching](https://nx.dev/ci/features/remote-cache?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [Task distribution across multiple machines](https://nx.dev/ci/features/distribute-task-execution?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [Automated e2e test splitting](https://nx.dev/ci/features/split-e2e-tasks?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [Task flakiness detection and rerunning](https://nx.dev/ci/features/flaky-tasks?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-
-### Step 2
-
-Use the following command to configure a CI workflow for your workspace:
-
-```sh
-npx nx g ci-workflow
-```
-
-[Learn more about Nx on CI](https://nx.dev/ci/intro/ci-with-nx#ready-get-started-with-your-provider?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-
-## Install Nx Console
-
-Nx Console is an editor extension that enriches your developer experience. It lets you run tasks, generate code, and improves code autocompletion in your IDE. It is available for VSCode and IntelliJ.
-
-[Install Nx Console &raquo;](https://nx.dev/getting-started/editor-setup?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-
-## Useful links
-
-Learn more:
-
-- [Learn more about this workspace setup](https://nx.dev/nx-api/node?utm_source=nx_project&amp;utm_medium=readme&amp;utm_campaign=nx_projects)
-- [Learn about Nx on CI](https://nx.dev/ci/intro/ci-with-nx?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [Releasing Packages with Nx release](https://nx.dev/features/manage-releases?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [What are Nx plugins?](https://nx.dev/concepts/nx-plugins?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-
-And join the Nx community:
-- [Discord](https://go.nx.dev/community)
-- [Follow us on X](https://twitter.com/nxdevtools) or [LinkedIn](https://www.linkedin.com/company/nrwl)
-- [Our Youtube channel](https://www.youtube.com/@nxdevtools)
-- [Our blog](https://nx.dev/blog?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
+- `GET /stats/overview` - Obtener estadísticas generales de tareas
+  - Total de tareas
+  - Tareas completadas
+  - Tareas pendientes
+  - Tareas vencidas
+  - Tareas próximas
+  - Tareas sin fecha de vencimiento
+- `GET /stats/completion-rate` - Obtener tasa de finalización de tareas por mes
+- `GET /stats/distribution` - Obtener distribución de tareas por estado y fecha de vencimiento
+- `GET /stats/productivity` - Obtener puntuación de productividad y métricas
