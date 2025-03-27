@@ -62,14 +62,18 @@ docker-compose up -d
 
 Esto iniciará:
 
-- API en `http://localhost:4242`
-- PostgreSQL en `localhost:5432`
+- API en `http://0.0.0.0:4242`
+- PostgreSQL en `http://0.0.0.0:5432`
 
 ### 2. Iniciar el Dashboard
 
 ```bash
 npx nx dev dashboard
 ```
+
+Esto iniciará:
+
+- API en `http://localhost:8080`
 
 ## API Endpoints
 
