@@ -5,6 +5,7 @@ import { Sidebar } from '@/components/layout/Sidebar';
 import { StatsOverview } from '@/components/home/StatsOverview';
 import styles from './page.module.scss';
 import { useAuth } from '@/hooks/useAuth';
+import { Loading } from '../../components/atoms/Loading';
 
 interface Stats {
   totalTasks: number;
@@ -23,8 +24,6 @@ const HomePage: FC = () => {
   });
 
   useEffect(() => {
-    // TODO: Fetch stats from API
-    // This is mock data for now
     setStats({
       totalTasks: 12,
       completedTasks: 8,
@@ -34,7 +33,7 @@ const HomePage: FC = () => {
   }, []);
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <Loading />;
   }
 
   if (!user) {

@@ -6,6 +6,7 @@ import { TaskForm } from './TaskForm';
 import { TaskService } from '@/application/services/task.service';
 import { useAuth } from '@/hooks/useAuth';
 import styles from './TaskDetailClient.module.scss';
+import { Loading } from '@/components/atoms/Loading';
 
 interface Task {
   id: number;
@@ -104,7 +105,7 @@ export const TaskDetailClient: FC<TaskDetailClientProps> = ({ taskId }) => {
   };
 
   if (authLoading || loading) {
-    return <div>Loading...</div>;
+    return <Loading />;
   }
 
   if (!task) {

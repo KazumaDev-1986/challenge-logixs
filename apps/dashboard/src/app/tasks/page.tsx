@@ -8,6 +8,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { TaskService } from '@/application/services/task.service';
 import { Task } from '@/types/task';
 import { TaskCard } from '@/components/tasks/TaskCard';
+import { Loading } from '@/components/atoms/Loading';
 
 const TasksPage: FC = () => {
   const [tasks, setTasks] = useState<Task[]>([]);
@@ -81,7 +82,7 @@ const TasksPage: FC = () => {
   };
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <Loading />;
   }
 
   return (
