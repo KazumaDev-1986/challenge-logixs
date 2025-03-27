@@ -94,14 +94,23 @@ const TasksPage: FC = () => {
         </Link>
       </div>
       <div className={styles.taskList}>
-        {tasks.map((task) => (
-          <TaskCard
-            key={task.id}
-            task={task}
-            onToggleComplete={handleToggleComplete}
-            onDelete={handleDelete}
-          />
-        ))}
+        {tasks.length === 0 ? (
+          <div
+            className={styles.taskCard}
+            style={{ textAlign: 'center', padding: '3rem' }}
+          >
+            No tasks
+          </div>
+        ) : (
+          tasks.map((task) => (
+            <TaskCard
+              key={task.id}
+              task={task}
+              onToggleComplete={handleToggleComplete}
+              onDelete={handleDelete}
+            />
+          ))
+        )}
       </div>
     </div>
   );

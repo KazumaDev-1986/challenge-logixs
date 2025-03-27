@@ -1,7 +1,8 @@
 import { FC, useEffect, useState } from 'react';
-import { StatService, TaskOverview } from '@/application/services/stat.service';
+import { StatService } from '../../application/services/stat.service';
 import { Loading } from '../atoms/Loading';
 import styles from './OverviewStat.module.scss';
+import { TaskOverview } from '../../types/stats';
 
 interface OverviewStatProps {
   token: string;
