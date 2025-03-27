@@ -6,6 +6,7 @@ import { MainButton } from '../atoms/MainButton';
 import styles from './AuthForms.module.scss';
 import Link from 'next/link';
 import { useAuth } from '@/application/hooks/useAuth';
+import { PublicGuard } from './PublicGuard';
 
 export const RegisterForm: FC = () => {
   const { signUp } = useAuth();
@@ -46,57 +47,59 @@ export const RegisterForm: FC = () => {
   };
 
   return (
-    <div className={styles.formContainer}>
-      <h2 className={styles.title}>Sign Up</h2>
+    <PublicGuard>
+      <div className={styles.formContainer}>
+        <h2 className={styles.title}>Sign Up</h2>
 
-      {error && <div className={styles.error}>{error}</div>}
+        {error && <div className={styles.error}>{error}</div>}
 
-      <form onSubmit={handleSubmit} className={styles.form}>
-        <InputField
-          ref={nameRef}
-          label="Name"
-          type="text"
-          required
-          placeholder="Enter your name"
-        />
+        <form onSubmit={handleSubmit} className={styles.form}>
+          <InputField
+            ref={nameRef}
+            label="Name"
+            type="text"
+            required
+            placeholder="Enter your name"
+          />
 
-        <InputField
-          ref={emailRef}
-          label="Email"
-          type="email"
-          required
-          placeholder="Enter your email"
-        />
+          <InputField
+            ref={emailRef}
+            label="Email"
+            type="email"
+            required
+            placeholder="Enter your email"
+          />
 
-        <InputField
-          ref={passwordRef}
-          label="Password"
-          type="password"
-          required
-          placeholder="Enter your password"
-        />
+          <InputField
+            ref={passwordRef}
+            label="Password"
+            type="password"
+            required
+            placeholder="Enter your password"
+          />
 
-        <InputField
-          ref={confirmPasswordRef}
-          label="Confirm Password"
-          type="password"
-          required
-          placeholder="Confirm your password"
-        />
+          <InputField
+            ref={confirmPasswordRef}
+            label="Confirm Password"
+            type="password"
+            required
+            placeholder="Confirm your password"
+          />
 
-        <MainButton type="submit" fullWidth isLoading={isLoading}>
-          Sign Up
-        </MainButton>
+          <MainButton type="submit" fullWidth isLoading={isLoading}>
+            Sign Up
+          </MainButton>
 
-        <div className={styles.footer}>
-          <p>
-            Already have an account?{' '}
-            <Link href="/auth/sign-in" className={styles.link}>
-              Sign In
-            </Link>
-          </p>
-        </div>
-      </form>
-    </div>
+          <div className={styles.footer}>
+            <p>
+              Already have an account?{' '}
+              <Link href="/auth/sign-in" className={styles.link}>
+                Sign In
+              </Link>
+            </p>
+          </div>
+        </form>
+      </div>
+    </PublicGuard>
   );
 };

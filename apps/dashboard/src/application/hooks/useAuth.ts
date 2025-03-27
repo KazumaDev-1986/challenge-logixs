@@ -56,6 +56,7 @@ export const useAuth = () => {
   const signUp = async (name: string, email: string, password: string) => {
     try {
       await authService.signUp({ name, email, password });
+      alert('User created successfully');
       router.push('/auth/sign-in');
     } catch (error) {
       throw error;

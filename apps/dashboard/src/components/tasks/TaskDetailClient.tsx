@@ -32,7 +32,7 @@ const formatDateForInput = (dateString: string) => {
 
 export const TaskDetailClient: FC<TaskDetailClientProps> = ({ taskId }) => {
   const router = useRouter();
-  const { user, loading: authLoading } = useAuth();
+  const { user, loading: authLoading, logout } = useAuth();
   const [task, setTask] = useState<Task | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -42,7 +42,7 @@ export const TaskDetailClient: FC<TaskDetailClientProps> = ({ taskId }) => {
         if (authLoading) return;
 
         if (!user?.token) {
-          router.push('/sign-in');
+          logout();
           return;
         }
 
@@ -51,8 +51,7 @@ export const TaskDetailClient: FC<TaskDetailClientProps> = ({ taskId }) => {
         setTask(data);
       } catch (error) {
         if (error instanceof Error && error.message.includes('401')) {
-          localStorage.removeItem('user');
-          router.push('/sign-in');
+          logout();
         }
         console.error('Error fetching task:', error);
       } finally {
@@ -80,8 +79,7 @@ export const TaskDetailClient: FC<TaskDetailClientProps> = ({ taskId }) => {
       router.push('/tasks');
     } catch (error) {
       if (error instanceof Error && error.message.includes('401')) {
-        localStorage.removeItem('user');
-        router.push('/sign-in');
+        logout();
       }
       console.error('Error updating task:', error);
     }
@@ -96,8 +94,7 @@ export const TaskDetailClient: FC<TaskDetailClientProps> = ({ taskId }) => {
         router.push('/tasks');
       } catch (error) {
         if (error instanceof Error && error.message.includes('401')) {
-          localStorage.removeItem('user');
-          router.push('/sign-in');
+          logout();
         }
         console.error('Error deleting task:', error);
       }

@@ -29,10 +29,17 @@ export const useAuth = () => {
     setLoading(false);
   }, [router]);
 
+  const login = (userData: User) => {
+    localStorage.setItem('user', JSON.stringify(userData));
+    setUser(userData);
+    router.push('/home');
+  };
+
   const logout = () => {
     localStorage.removeItem('user');
+    setUser(null);
     router.push('/auth/sign-in');
   };
 
-  return { user, loading, logout };
+  return { user, loading, login, logout };
 };

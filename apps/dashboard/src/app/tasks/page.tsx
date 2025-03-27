@@ -14,7 +14,7 @@ const TasksPage: FC = () => {
   const [tasks, setTasks] = useState<Task[]>([]);
   const [loading, setLoading] = useState(true);
   const router = useRouter();
-  const { user } = useAuth();
+  const { user, logout } = useAuth();
 
   useEffect(() => {
     const fetchTasks = async () => {
@@ -25,8 +25,7 @@ const TasksPage: FC = () => {
         setTasks(data);
       } catch (error) {
         if (error instanceof Error && error.message.includes('401')) {
-          localStorage.removeItem('user');
-          router.push('/sign-in');
+          logout();
         }
         console.error('Error fetching tasks:', error);
       } finally {
@@ -46,8 +45,7 @@ const TasksPage: FC = () => {
         setTasks(tasks.filter((task) => task.id !== id));
       } catch (error) {
         if (error instanceof Error && error.message.includes('401')) {
-          localStorage.removeItem('user');
-          router.push('/sign-in');
+          logout();
         }
         console.error('Error deleting task:', error);
       }
@@ -74,8 +72,7 @@ const TasksPage: FC = () => {
       );
     } catch (error) {
       if (error instanceof Error && error.message.includes('401')) {
-        localStorage.removeItem('user');
-        router.push('/sign-in');
+        logout();
       }
       console.error('Error updating task:', error);
     }

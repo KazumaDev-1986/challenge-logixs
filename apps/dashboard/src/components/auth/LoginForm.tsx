@@ -6,6 +6,7 @@ import { MainButton } from '../atoms/MainButton';
 import styles from './AuthForms.module.scss';
 import Link from 'next/link';
 import { useAuth } from '@/application/hooks/useAuth';
+import { PublicGuard } from './PublicGuard';
 
 export const LoginForm: FC = () => {
   const { signIn } = useAuth();
@@ -38,41 +39,43 @@ export const LoginForm: FC = () => {
   };
 
   return (
-    <div className={styles.formContainer}>
-      <h2 className={styles.title}>Sign In</h2>
+    <PublicGuard>
+      <div className={styles.formContainer}>
+        <h2 className={styles.title}>Sign In</h2>
 
-      {error && <div className={styles.error}>{error}</div>}
+        {error && <div className={styles.error}>{error}</div>}
 
-      <form onSubmit={handleSubmit} className={styles.form}>
-        <InputField
-          ref={emailRef}
-          label="Email"
-          type="email"
-          required
-          placeholder="Enter your email"
-        />
+        <form onSubmit={handleSubmit} className={styles.form}>
+          <InputField
+            ref={emailRef}
+            label="Email"
+            type="email"
+            required
+            placeholder="Enter your email"
+          />
 
-        <InputField
-          ref={passwordRef}
-          label="Password"
-          type="password"
-          required
-          placeholder="Enter your password"
-        />
+          <InputField
+            ref={passwordRef}
+            label="Password"
+            type="password"
+            required
+            placeholder="Enter your password"
+          />
 
-        <MainButton type="submit" fullWidth isLoading={isLoading}>
-          Sign In
-        </MainButton>
+          <MainButton type="submit" fullWidth isLoading={isLoading}>
+            Sign In
+          </MainButton>
 
-        <div className={styles.footer}>
-          <p>
-            Don't have an account?{' '}
-            <Link href="/auth/sign-up" className={styles.link}>
-              Sign Up
-            </Link>
-          </p>
-        </div>
-      </form>
-    </div>
+          <div className={styles.footer}>
+            <p>
+              Don't have an account?{' '}
+              <Link href="/auth/sign-up" className={styles.link}>
+                Sign Up
+              </Link>
+            </p>
+          </div>
+        </form>
+      </div>
+    </PublicGuard>
   );
 };

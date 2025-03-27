@@ -9,7 +9,7 @@ import styles from './page.module.scss';
 
 const NewTaskPage: FC = () => {
   const router = useRouter();
-  const { user } = useAuth();
+  const { user, logout } = useAuth();
 
   const handleSubmit = async (data: any) => {
     try {
@@ -28,8 +28,7 @@ const NewTaskPage: FC = () => {
       router.push('/tasks');
     } catch (error) {
       if (error instanceof Error && error.message.includes('401')) {
-        localStorage.removeItem('user');
-        router.push('/sign-in');
+        logout();
       }
       console.error('Error creating task:', error);
     }

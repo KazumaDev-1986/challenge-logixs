@@ -71,7 +71,7 @@ class AuthService {
     return data as T;
   }
 
-  public async signUp(data: SignUpData): Promise<AuthResponse> {
+  public async signUp(data: SignUpData): Promise<void> {
     try {
       const response = await fetch(`${API_URL}/auth/signup`, {
         method: 'POST',
@@ -81,9 +81,7 @@ class AuthService {
         body: JSON.stringify(data),
       });
 
-      const result = await this.handleResponse<AuthResponse>(response);
-      this.setUser({ ...result.user, token: result.token });
-      return result;
+      await this.handleResponse<AuthResponse>(response);
     } catch (error) {
       if (error instanceof Error) {
         throw new Error(error.message);
