@@ -5,8 +5,10 @@ import { InputField } from '../atoms/InputField';
 import { MainButton } from '../atoms/MainButton';
 import styles from './AuthForms.module.scss';
 import Link from 'next/link';
+import { useAuth } from '@/application/hooks/useAuth';
 
 export const LoginForm: FC = () => {
+  const { signIn } = useAuth();
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const emailRef = useRef<HTMLInputElement>(null);
@@ -18,10 +20,18 @@ export const LoginForm: FC = () => {
     setError(null);
 
     try {
-      // Aquí irá la lógica de autenticación
-      console.log('Login attempt');
+      const email = emailRef.current?.value;
+      const password = passwordRef.current?.value;
+
+      if (!email || !password) {
+        throw new Error('Please fill in all fields');
+      }
+
+      await signIn(email, password);
     } catch (err) {
-      setError('Invalid credentials');
+      setError(
+        err instanceof Error ? err.message : 'An error occurred during sign in'
+      );
     } finally {
       setIsLoading(false);
     }

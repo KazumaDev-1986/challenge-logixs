@@ -38,11 +38,10 @@ export class AuthService {
     if (typeof expires !== 'string' && typeof expires !== 'number') {
       throw new Error('Invalid JWT_EXPIRES_IN value');
     }
-
     const token = jwt.sign({ userId: user.id }, secret as jwt.Secret, {
       expiresIn: expires as jwt.SignOptions['expiresIn'],
     });
 
-    return { token };
+    return { token, user: { name: user.name, email: user.email } };
   }
 }
